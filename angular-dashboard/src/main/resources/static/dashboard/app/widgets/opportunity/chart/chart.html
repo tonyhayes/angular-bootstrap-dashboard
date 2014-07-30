@@ -1,0 +1,12 @@
+                        <a class="btn" ng-class="{true: 'btn-info', false: 'btn-info'}[!countValue]"
+                           ng-click="countValue = !countValue">{{!countValue && 'Revenue' || 'Deals'}} </a> <label>Select
+                        From Date</label>
+                        <quick-datepicker icon-class='icon-calendar' label-format='EEEE, MMMM d, yyyy'
+                                          ng-model='selectedDate' placeholder='Pick a Date'
+                                          disable-timepicker='true'></quick-datepicker>
+                    </div>
+                    <nvd3  options='options' data='data'></nvd3>
+
+
+
+
