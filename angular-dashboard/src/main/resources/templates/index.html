@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "http://www.thymeleaf.org/dtd/xhtml11-thymeleaf-spring4-4.dtd">
+<html data-ng-app="db" data-ng-controller="ApplicationController" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thttp://www.thymeleaf.org/dtd/xhtml11-thymeleaf-spring4-4.dtd">
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="dashboard">
+
+    <title>Dashboard</title>
+
+    <!-- font awesome -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{css/bootstrap.css}" rel="stylesheet"/>
+
+    <!-- dashboard style -->
+    <link th:href="@{css/dashboard.css}" rel="stylesheet"/>
+    <link th:href="@{dashboard/framework/styles/main.css}" rel="stylesheet"/>
+    <!-- endbuild -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+        var dmApplicationEntryPoint = '//localhost:9090';
+
+    </script>
+
+</head>
+
+<body >
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container" ng-controller="NavigationController">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-click="toggleNav()">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">drillMap!</a>
+        </div>
+        <div collapse="navCollapsed" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li ng-repeat="db in dbs">
+                    <a href="#/dashboard/{{db.id}}">{{db.title}}</a>
+                </li>
+           </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+
+<div ng-if='!loadingDone' class="container">
+    <!-- this is my loading div, it is taken out of the dom once everything is loaded! -->
+    <h2><small>Loading:</small></h2>
+    <div class="progress progress-striped active" ng-controller='LoadingController'>
+        <div class="bar" style="width:{{percentDone}}%">
+        </div>
+    </div>
+</div>
+
+<div ng-if='loadingDone' class="container">
+    <!--
+       this is my working div, it is inserted to  the dom once everything is loaded!
+       By putting the ng-view in here, the routes only get fired AFTER I have
+       done al off my initializations, and requests.
+    -->
+    <!-- Note that AngularJS has a built-in ng-animation direction. Left in animated-view to show a
+          custom directive -->
+    <ng-view></ng-view>
+</div>
+
+
+
+
+<!-- build:js js/jquery.min.js -->
+<script th:src="@{dashboard/components/jQuery/jquery.min.js}"></script>
+<script th:src="@{dashboard/components/jquery-ui/jquery-ui.min.js}"></script>
+
+<!-- build:js js/angular.min.js -->
+<script th:src="@{dashboard/components/angular/angular.js}"></script>
+<script th:src="@{dashboard/components/angular/angular-route.js}"></script>
+<script th:src="@{dashboard/components/angular/angular-sanitize.js}"></script>
+
+<!-- angular-bootstrap -->
+<script th:src="@{dashboard/components/bootstrap-ui/bootstrap-ui.js}"></script>
+
+<!-- loaders -->
+<script th:src="@{dashboard/components/script/script.js}"></script>
+<script th:src="@{dashboard/components/ocLazyLoad/ocLazyLoad.js}"></script>
+
+<!-- local storage -->
+<script th:src="@{dashboard/components/angular-local-storage/angular-local-storage.js}"></script>
+
+<!-- dashboard framework scripts -->
+<script th:src="@{dashboard/framework/scripts/adf.js}"></script>
+<script th:src="@{dashboard/framework/scripts/provider.js}"></script>
+<script th:src="@{dashboard/framework/scripts/sortable.js}"></script>
+<script th:src="@{dashboard/framework/scripts/widget-content.js}"></script>
+<script th:src="@{dashboard/framework/scripts/widget.js}"></script>
+<script th:src="@{dashboard/framework/scripts/dashboard.js}"></script>
+
+
+<script th:src="@{dashboard/app/dashboard.js}"></script>
+<script th:src="@{dashboard/app/controllers/dashboardController.js}"></script>
+<script th:src="@{dashboard/app/services/dashboardService.js}"></script>
+
+<!-- endbuild -->
+</body>
+</html>

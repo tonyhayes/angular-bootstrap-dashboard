@@ -1,0 +1,9 @@
+logs/*
+!.gitkeep
+tmp
+.DS_Store
+.idea
+*.iml
+node_modules/
+docs/
+i18n/
