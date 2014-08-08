@@ -7,15 +7,19 @@ angular.module('dashboardServices', []).
 // simple message\ing (pub/sub)
 // -- if we need something more complex -
 // http://codingsmackdown.tv/blog/2013/04/29/hailing-all-frequencies-communicating-in-angularjs-with-the-pubsub-design-pattern/
-    .factory('msgBus', ['$rootScope', function ($rootScope) {
+    .factory('msgBus', ['$rootScope','socketService', function ($rootScope, socketService) {
         var msgBus = {};
-        msgBus.emitMsg = function (msg, data) {
+
+        msgBus.emitMsg = function (channel, data) {
             data = data || {};
-            $rootScope.$emit(msg, data);
+            $rootScope.$emit(channel, data);
+            socketService.sendSocketMessage(channel, data);
+
         };
-        msgBus.broadcastMsg = function (msg, data) {
+        msgBus.broadcastMsg = function (channel, data) {
             data = data || {};
-            $rootScope.$broadcast(msg, data);
+            $rootScope.$broadcast(channel, data);
+            socketService.sendSocketMessage(channel, data);
         };
         msgBus.onMsg = function (msg, func, scope) {
             var unbind = $rootScope.$on(msg, func);
@@ -23,8 +27,64 @@ angular.module('dashboardServices', []).
                 scope.$on('$destroy', unbind);
             }
         };
+
+        msgBus.queueMsg = function (channel, data) {
+            var initialize = true;
+            socketService.sendSocketMessage(channel, data, initialize);
+        };
+
         return msgBus;
     }])
+    .service('socketService', function ($rootScope) {
+
+
+        var stompClient = null;
+
+        var token = makeToken();
+        var socket = new SockJS(dmApplicationEntryPoint+'/socket');
+
+        this.getSocket = function () {
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/widget', function (message) {
+                    console.log(message);
+                    var msg = JSON.parse(message.body);
+                    if (token == msg.token ) {
+                        if(msg.initialize){
+                            $rootScope.$emit(msg.channel, msg.message);
+                            console.log('initial message -- same token');
+                        }else{
+                            console.log('discarding message -- same token');
+                        }
+                    }else{
+                        $rootScope.$emit(msg.channel, msg.message);
+                    }
+                });
+            });
+        };
+        this.sendSocketMessage = function (channel, data, initialize ) {
+            if(!initialize){
+                initialize = false;
+            }
+            var payLoad = JSON.stringify({ token:token, channel:channel, initialize:initialize, message: data });
+            stompClient.send("/app/socket", {} , payLoad);
+        };
+
+        function makeToken()
+        {
+            var token = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 5; i++ )
+                token += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return token;
+        }
+
+
+
+    })
     .service('dashboardService', function (localStorageService) {
 
 

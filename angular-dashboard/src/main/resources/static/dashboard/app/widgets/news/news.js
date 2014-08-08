@@ -33,6 +33,7 @@ angular.module('dm.widgets.news', ['adf.provider'])
                 description: 'Displays a RSS/Atom feed',
                 templateUrl: 'dashboard/app/widgets/news/news.html',
                 controller: 'newsCtrl',
+                reload: true,
                 resolve: {
                     feed: function (newsService, config) {
                         if (config.url) {
@@ -41,7 +42,7 @@ angular.module('dm.widgets.news', ['adf.provider'])
                     }
                 },
                 edit: {
-                    templateUrl: 'scripts/widgets/news/edit.html'
+                    templateUrl: 'dashboard/app/widgets/news/edit.html'
                 }
             });
     })

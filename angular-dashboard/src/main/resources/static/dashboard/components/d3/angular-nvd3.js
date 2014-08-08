@@ -1,14 +1,14 @@
 /**************************************************************************
- * AngularJS-nvD3, v0.0.9; MIT License; 06/18/2014 01:20
- * http://krispo.github.io/angular-nvd3
- **************************************************************************/
-(function () {
+* AngularJS-nvD3, v0.0.9; MIT License; 07/24/2014 12:59
+* http://krispo.github.io/angular-nvd3
+**************************************************************************/
+(function(){
 
     'use strict';
 
     angular.module('nvd3', [])
 
-        .directive('nvd3', [function () {
+        .directive('nvd3', [function(){
             return {
                 restrict: 'AE',
                 scope: {
@@ -18,9 +18,8 @@
                     events: '=?',   //global events that directive would subscribe to, [optional]
                     config: '=?'    //global directive configuration, [optional]
                 },
-                link: function (scope, element, attrs) {
-                    var chart,
-                        defaultConfig = { extended: false, visible: true, disabled: false, autorefresh: true };
+                link: function(scope, element, attrs){
+                    var defaultConfig = { extended: false, visible: true, disabled: false, autorefresh: true, refreshDataOnly: false };
 
                     //basic directive configuration
                     scope._config = angular.extend(defaultConfig, scope.config);
@@ -28,12 +27,11 @@
                     //directive global api
                     scope.api = {
                         // Fully refresh directive
-                        refresh: function () {
+                        refresh: function(){
                             scope.api.updateWithOptions(scope.options);
                         },
-
                         // Update chart with new options
-                        updateWithOptions: function (options) {
+                        updateWithOptions: function(options){
                             // Clearing
                             scope.api.clearElement();
 
@@ -44,16 +42,16 @@
                             if (!scope._config.visible) return;
 
                             // Initialize chart with specific type
-                            chart = nv.models[options.chart.type]();
+                            scope.chart = nv.models[options.chart.type]();
 
-                            angular.forEach(chart, function (value, key) {
+                            angular.forEach(scope.chart, function(value, key){
                                 if (key === 'options');
 
                                 else if (key === 'dispatch') {
                                     if (options.chart[key] === undefined || options.chart[key] === null) {
                                         if (scope._config.extended) options.chart[key] = {};
                                     }
-                                    configureEvents(chart[key], options.chart[key]);
+                                    configureEvents(scope.chart[key], options.chart[key]);
                                 }
 
                                 else if ([
@@ -85,59 +83,58 @@
                                     'y4Axis',
                                     'interactiveLayer',
                                     'controls'
-                                ].indexOf(key) >= 0) {
+                                ].indexOf(key) >= 0){
                                     if (options.chart[key] === undefined || options.chart[key] === null) {
                                         if (scope._config.extended) options.chart[key] = {};
                                     }
-                                    configure(chart[key], options.chart[key], options.chart.type);
+                                    configure(scope.chart[key], options.chart[key], options.chart.type);
                                 }
 
                                 else if (//TODO: need to fix bug in nvd3
-                                    (key === 'clipEdge' && options.chart.type === 'multiBarHorizontalChart')
-                                    || (key === 'clipVoronoi' && options.chart.type === 'historicalBarChart')
-                                    || (key === 'color' && options.chart.type === 'indentedTreeChart')
-                                    || (key === 'defined' && (options.chart.type === 'historicalBarChart' || options.chart.type === 'cumulativeLineChart' || options.chart.type === 'lineWithFisheyeChart'))
-                                    || (key === 'forceX' && (options.chart.type === 'multiBarChart' || options.chart.type === 'discreteBarChart' || options.chart.type === 'multiBarHorizontalChart'))
-                                    || (key === 'interpolate' && options.chart.type === 'historicalBarChart')
-                                    || (key === 'isArea' && options.chart.type === 'historicalBarChart')
-                                    || (key === 'size' && options.chart.type === 'historicalBarChart')
-                                    || (key === 'stacked' && options.chart.type === 'stackedAreaChart')
-                                    || (key === 'values' && options.chart.type === 'pieChart')
-                                    || (key === 'xScale' && options.chart.type === 'scatterChart')
-                                    || (key === 'yScale' && options.chart.type === 'scatterChart')
-                                    || (key === 'x' && (options.chart.type === 'lineWithFocusChart' || options.chart.type === 'multiChart'))
-                                    || (key === 'y' && options.chart.type === 'lineWithFocusChart' || options.chart.type === 'multiChart')
+                                    (key ==='clipEdge' && options.chart.type === 'multiBarHorizontalChart')
+                                        || (key === 'clipVoronoi' && options.chart.type === 'historicalBarChart')
+                                        || (key === 'color' && options.chart.type === 'indentedTreeChart')
+                                        || (key === 'defined' && (options.chart.type === 'historicalBarChart' || options.chart.type === 'cumulativeLineChart' || options.chart.type === 'lineWithFisheyeChart'))
+                                        || (key === 'forceX' && (options.chart.type === 'multiBarChart' || options.chart.type === 'discreteBarChart' || options.chart.type === 'multiBarHorizontalChart'))
+                                        || (key === 'interpolate' && options.chart.type === 'historicalBarChart')
+                                        || (key === 'isArea' && options.chart.type === 'historicalBarChart')
+                                        || (key === 'size' && options.chart.type === 'historicalBarChart')
+                                        || (key === 'stacked' && options.chart.type === 'stackedAreaChart')
+                                        || (key === 'values' && options.chart.type === 'pieChart')
+                                        || (key === 'xScale' && options.chart.type === 'scatterChart')
+                                        || (key === 'yScale' && options.chart.type === 'scatterChart')
+                                        || (key === 'x' && (options.chart.type === 'lineWithFocusChart' || options.chart.type === 'multiChart'))
+                                        || (key === 'y' && options.chart.type === 'lineWithFocusChart' || options.chart.type === 'multiChart')
                                     );
 
-                                else if (options.chart[key] === undefined || options.chart[key] === null) {
+                                else if (options.chart[key] === undefined || options.chart[key] === null){
                                     if (scope._config.extended) options.chart[key] = value();
                                 }
 
-                                else chart[key](options.chart[key]);
+                                else scope.chart[key](options.chart[key]);
                             });
 
                             // Update with data
                             scope.api.updateWithData(scope.data);
 
                             // Configure wrappers
-                            configureWrapper('title');
-                            configureWrapper('subtitle');
-                            configureWrapper('caption');
+                            if (options['title'] || scope._config.extended) configureWrapper('title');
+                            if (options['subtitle'] || scope._config.extended) configureWrapper('subtitle');
+                            if (options['caption'] || scope._config.extended) configureWrapper('caption');
+
 
                             // Configure styles
-                            configureStyles();
+                            if (options['styles'] || scope._config.extended) configureStyles();
 
-                            nv.addGraph(function () {
+                            nv.addGraph(function() {
                                 // Update the chart when window resizes
-                                nv.utils.windowResize(function () {
-                                    chart.update();
-                                });
-                                return chart;
+                                nv.utils.windowResize(function() { scope.chart.update(); });
+                                return scope.chart;
                             }, options.chart['callback']);
                         },
 
                         // Update chart with new data
-                        updateWithData: function (data) {
+                        updateWithData: function (data){
                             if (data) {
                                 scope.options.chart['transitionDuration'] = +scope.options.chart['transitionDuration'] || 250;
                                 // remove whole svg element with old data
@@ -149,24 +146,29 @@
                                     .attr('width', scope.options.chart.width)
                                     .datum(data)
                                     .transition().duration(scope.options.chart['transitionDuration'])
-                                    .call(chart);
+                                    .call(scope.chart);
+
+                                // Set up svg height and width. It is important for all browsers...
+                                d3.select(element[0]).select('svg')[0][0].style.height = scope.options.chart.height + 'px';
+                                d3.select(element[0]).select('svg')[0][0].style.width = scope.options.chart.width + 'px';
+                                if (scope.options.chart.type === 'multiChart') scope.chart.update(); // multiChart is not automatically updated
                             }
                         },
 
                         // Fully clear directive element
-                        clearElement: function () {
+                        clearElement: function (){
                             element.find('.title').remove();
                             element.find('.subtitle').remove();
                             element.find('.caption').remove();
                             element.empty();
-                            chart = null;
+                            scope.chart = null;
                         }
                     };
 
                     // Configure the chart model with the passed options
-                    function configure(chart, options, chartType) {
-                        if (chart && options) {
-                            angular.forEach(chart, function (value, key) {
+                    function configure(chart, options, chartType){
+                        if (chart && options){
+                            angular.forEach(chart, function(value, key){
                                 if (key === 'dispatch') {
                                     if (options[key] === undefined || options[key] === null) {
                                         if (scope._config.extended) options[key] = {};
@@ -175,8 +177,8 @@
                                 }
                                 else if (//TODO: need to fix bug in nvd3
                                     (key === 'xScale' && chartType === 'scatterChart')
-                                    || (key === 'yScale' && chartType === 'scatterChart')
-                                    || (key === 'values' && chartType === 'pieChart'));
+                                        || (key === 'yScale' && chartType === 'scatterChart')
+                                        || (key === 'values' && chartType === 'pieChart'));
                                 else if ([
                                     'scatter',
                                     'defined',
@@ -184,8 +186,8 @@
                                     'axis',
                                     'rangeBand',
                                     'rangeBands'
-                                ].indexOf(key) < 0) {
-                                    if (options[key] === undefined || options[key] === null) {
+                                ].indexOf(key) < 0){
+                                    if (options[key] === undefined || options[key] === null){
                                         if (scope._config.extended) options[key] = value();
                                     }
                                     else chart[key](options[key]);
@@ -196,10 +198,10 @@
 
                     // Subscribe to the chart events (contained in 'dispatch')
                     // and pass eventHandler functions in the 'options' parameter
-                    function configureEvents(dispatch, options) {
-                        if (dispatch && options) {
-                            angular.forEach(dispatch, function (value, key) {
-                                if (options[key] === undefined || options[key] === null) {
+                    function configureEvents(dispatch, options){
+                        if (dispatch && options){
+                            angular.forEach(dispatch, function(value, key){
+                                if (options[key] === undefined || options[key] === null){
                                     if (scope._config.extended) options[key] = value.on;
                                 }
                                 else dispatch.on(key + '._', options[key]);
@@ -209,8 +211,8 @@
 
                     // Configure 'title', 'subtitle', 'caption'.
                     // nvd3 has no sufficient models for it yet.
-                    function configureWrapper(name) {
-                        var _ = angular.extend(defaultWrapper(name), scope.options[name] || {});
+                    function configureWrapper(name){
+                        var _ = extendDeep(defaultWrapper(name), scope.options[name] || {});
 
                         if (scope._config.extended) scope.options[name] = _;
 
@@ -229,12 +231,12 @@
                     }
 
                     // Add some styles to the whole directive element
-                    function configureStyles() {
-                        var _ = angular.extend(defaultStyles(), scope.options['styles'] || {});
+                    function configureStyles(){
+                        var _ = extendDeep(defaultStyles(), scope.options['styles'] || {});
 
                         if (scope._config.extended) scope.options['styles'] = _;
 
-                        angular.forEach(_.classes, function (value, key) {
+                        angular.forEach(_.classes, function(value, key){
                             value ? element.addClass(key) : element.removeClass(key);
                         });
 
@@ -242,41 +244,38 @@
                     }
 
                     // Default values for 'title', 'subtitle', 'caption'
-                    function defaultWrapper(_) {
-                        switch (_) {
-                            case 'title':
-                                return {
-                                    enable: false,
-                                    text: 'Write Your Title',
-                                    class: 'h4',
-                                    css: {
-                                        width: scope.options.chart.width + 'px',
-                                        textAlign: 'center'
-                                    }
-                                };
-                            case 'subtitle':
-                                return {
-                                    enable: false,
-                                    text: 'Write Your Subtitle',
-                                    css: {
-                                        width: scope.options.chart.width + 'px',
-                                        textAlign: 'center'
-                                    }
-                                };
-                            case 'caption':
-                                return {
-                                    enable: false,
-                                    text: 'Figure 1. Write Your Caption text.',
-                                    css: {
-                                        width: scope.options.chart.width + 'px',
-                                        textAlign: 'center'
-                                    }
-                                };
+                    function defaultWrapper(_){
+                        switch (_){
+                            case 'title': return {
+                                enable: false,
+                                text: 'Write Your Title',
+                                class: 'h4',
+                                css: {
+                                    width: scope.options.chart.width + 'px',
+                                    textAlign: 'center'
+                                }
+                            };
+                            case 'subtitle': return {
+                                enable: false,
+                                text: 'Write Your Subtitle',
+                                css: {
+                                    width: scope.options.chart.width + 'px',
+                                    textAlign: 'center'
+                                }
+                            };
+                            case 'caption': return {
+                                enable: false,
+                                text: 'Figure 1. Write Your Caption text.',
+                                css: {
+                                    width: scope.options.chart.width + 'px',
+                                    textAlign: 'center'
+                                }
+                            };
                         }
                     }
 
                     // Default values for styles
-                    function defaultStyles() {
+                    function defaultStyles(){
                         return {
                             classes: {
                                 'with-3d-shadow': true,
@@ -287,21 +286,39 @@
                         };
                     }
 
+                    // Deep Extend json object
+                    function extendDeep(dst) {
+                        angular.forEach(arguments, function(obj) {
+                            if (obj !== dst) {
+                                angular.forEach(obj, function(value, key) {
+                                    if (dst[key] && dst[key].constructor && dst[key].constructor === Object) {
+                                        extendDeep(dst[key], value);
+                                    } else {
+                                        dst[key] = value;
+                                    }
+                                });
+                            }
+                        });
+                        return dst;
+                    }
+
                     // Watching on options, data, config changing
-                    scope.$watch('options', function (options) {
+                    scope.$watch('options', function(options){
                         if (!scope._config.disabled && scope._config.autorefresh) scope.api.refresh();
                     }, true);
-                    scope.$watch('data', function (data) {
-                        if (!scope._config.disabled && scope._config.autorefresh) scope.api.refresh();
+                    scope.$watch('data', function(data){
+                        if (!scope._config.disabled && scope._config.autorefresh) {
+                            scope._config.refreshDataOnly ? scope.chart.update() : scope.api.refresh(); // if wanted to refresh data only, use chart.update method, otherwise use full refresh.
+                        }
                     }, true);
-                    scope.$watch('config', function (config) {
+                    scope.$watch('config', function(config){
                         scope._config = angular.extend(defaultConfig, config);
                         scope.api.refresh();
                     }, true);
 
                     //subscribe on global events
-                    angular.forEach(scope.events, function (eventHandler, event) {
-                        scope.$on(event, function (e) {
+                    angular.forEach(scope.events, function(eventHandler, event){
+                        scope.$on(event, function(e){
                             return eventHandler(e, scope);
                         });
                     });

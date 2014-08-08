@@ -77,11 +77,8 @@ angular.module('dm.widgets.github', ['adf.provider', 'highcharts-ng', 'dashboard
             }
         };
     })
-    .controller('githubHistoryCtrl', function ($scope, $timeout, config, commits, msgBus) {
-        $timeout(function () {
-            msgBus.emitMsg('config.changed', {'id': 'tony'});
-        }, 100);
-        function parseDate(input) {
+    .controller('githubHistoryCtrl', function ($scope, $timeout, config, commits) {
+         function parseDate(input) {
             var parts = input.split('-');
             return Date.UTC(parts[0], parts[1] - 1, parts[2]);
         }
@@ -136,13 +133,7 @@ angular.module('dm.widgets.github', ['adf.provider', 'highcharts-ng', 'dashboard
         }
 
     })
-    .controller('githubAuthorCtrl', function ($scope, config, commits, msgBus) {
-
-
-// Passing in $scope allows the service to clean up references for you automatically
-        msgBus.onMsg('config.changed', function (event, data) {
-            console.log(data.id);
-        }, $scope);
+    .controller('githubAuthorCtrl', function ($scope, config, commits) {
 
         var data = {};
         angular.forEach(commits, function (commit) {

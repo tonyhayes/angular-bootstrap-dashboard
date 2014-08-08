@@ -3,7 +3,7 @@ angular.module('dm.widgets.opportunityChart', ['adf.provider', "ngQuickDate", 'n
         // template object for widgets
         var widget = {
             templateUrl: 'dashboard/app/widgets/opportunity/chart/chart.html',
-            reload: true,
+//            reload: true,
             resolve: {
                 cData: function (opportunityChartService) {
                         return opportunityChartService.get();
@@ -14,7 +14,7 @@ angular.module('dm.widgets.opportunityChart', ['adf.provider', "ngQuickDate", 'n
             }
         };
 
-        // register github template by extending the template object
+        // register chart template by extending the template object
         dashboardProvider
             .widget('opportunityChart', angular.extend({
                 title: 'Opportunity History',
@@ -67,8 +67,14 @@ angular.module('dm.widgets.opportunityChart', ['adf.provider', "ngQuickDate", 'n
         var savedData;
         var inProcess = false;
 
+        var lastSelectedDate = new Date(2012, 1, 16).getTime();
         $scope.selectedDate = new Date(2012, 1, 16).getTime();
-        $scope.options =  {
+
+        if(config.dateSync){
+            msgBus.queueMsg(config.publish, {'date': lastSelectedDate});
+        }
+
+            $scope.options =  {
             chart: {
                 type: 'multiBarHorizontalChart',
                     height: 450,
@@ -209,22 +215,40 @@ angular.module('dm.widgets.opportunityChart', ['adf.provider', "ngQuickDate", 'n
         });
 
         // when the revenue/deal button changes , we want to redraw the chart
-        $scope.$watch("selectedDate", function (newDate) {
 
-            if(!inProcess){
-                if(config.dateSync){
-                    msgBus.emitMsg(config.publish, {'date': newDate});
-                }else{
-                    dateChanged(newDate);
+
+            $scope.selectedDateChange = function () {
+                if(!inProcess){
+
+
+                    if(config.dateSync){
+                        msgBus.emitMsg(config.publish, {'date': $scope.selectedDate});
+                    }else{
+                        dateChanged(newDate);
+                    }
+
                 }
+            };
+
+
+
+        msgBus.onMsg(config.subscribe, function (event, data) {
+            inProcess = true;
+
+            // assume noise in channel
+            if(data.date){
+
+                    // if the date has been changed via a socket connection
+                    // then I need to wrap the chart function in a timeout
+                    // to force angular to call thier digest/apply function
+                    //http://stackoverflow.com/questions/21658490/angular-websocket-and-rootscope-apply
+
+                    $timeout(function () {
+                            dateChanged(data.date);
+
+                    }, 0);
             }
 
-
-
-        });
-        msgBus.onMsg(config.subscribe, function (event, data) {
-
-            dateChanged(data.date);
 
         }, $scope);
 

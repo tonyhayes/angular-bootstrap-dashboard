@@ -4,19 +4,26 @@
 angular.module('dashboardControllers', [])
 
     .controller("ApplicationController", [
-        "$scope", "$timeout", "$q", '$location', '$ocLazyLoad', 'dashboardService',
+        "$scope", "$timeout", "$q", '$location', '$ocLazyLoad', 'dashboardService','socketService',
 
-        function ($scope, $timeout, $q, $location, $ocLazyLoad, dashboardService) {
+        function ($scope, $timeout, $q, $location, $ocLazyLoad, dashboardService, socketService) {
 
             $scope.isCurrentPath = function (path) {
                 return $location.path() == path;
             };
 
+
+
             $scope.loadingDone = false;
             $scope.dbs = dashboardService.getDashboards();
 
+            socketService.getSocket();
+
+
             $q.all([
-                $ocLazyLoad.load({
+
+
+            $ocLazyLoad.load({
                     name: 'dm.widgets.opportunityChart',
                     reconfig: true,
                     files: ['dashboard/components/ng-quick-date/ng-quick-date.css',

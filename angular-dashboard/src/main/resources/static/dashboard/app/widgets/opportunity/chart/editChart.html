@@ -9,11 +9,11 @@
     </div>
      <div class="form-group">
         <label for="publish">Publish Channel</label>
-        <input type="text" class="form-control" id="publish" ng-model="config.publish" >
+        <input ng-disabled="!config.dateSync" type="text" class="form-control" id="publish" ng-model="config.publish" >
     </div>
     <div class="form-group">
         <label for="subscribe">Subscribe Channel</label>
-        <input type="text" class="form-control" id="subscribe" ng-model="config.subscribe" >
+        <input ng-disabled="!config.dateSync" type="text" class="form-control" id="subscribe" ng-model="config.subscribe" >
     </div>
 
 </form>

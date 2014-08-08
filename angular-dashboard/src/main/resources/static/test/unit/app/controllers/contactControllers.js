@@ -119,7 +119,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -150,7 +150,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -181,7 +181,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -212,7 +212,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -243,7 +243,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -274,7 +274,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -305,7 +305,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -336,7 +336,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -367,7 +367,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -398,7 +398,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -429,7 +429,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -460,7 +460,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -491,7 +491,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -522,7 +522,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -553,7 +553,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -584,7 +584,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -615,7 +615,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -646,7 +646,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -677,7 +677,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }
@@ -708,7 +708,7 @@ var contacts =     [ {
         },
         "curies" : [ {
             "href" : "http://localhost:9090/rels/{rel}",
-            "name" : "crm",
+            "name" : "db",
             "templated" : true
         } ]
     }

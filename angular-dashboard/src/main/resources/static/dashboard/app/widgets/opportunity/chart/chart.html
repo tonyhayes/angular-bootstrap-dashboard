@@ -2,7 +2,7 @@
                            ng-click="countValue = !countValue">{{!countValue && 'Revenue' || 'Deals'}} </a> <label>Select
                         From Date</label>
                         <quick-datepicker icon-class='icon-calendar' label-format='EEEE, MMMM d, yyyy'
-                                          ng-model='selectedDate' placeholder='Pick a Date'
+                                          ng-model='selectedDate' ng-change="selectedDateChange()" placeholder='Pick a Date'
                                           disable-timepicker='true'></quick-datepicker>
                     </div>
                     <nvd3  options='options' data='data'></nvd3>
