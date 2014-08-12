@@ -3,11 +3,11 @@
         Please insert a location in the widget configuration
     </div>
     <div class="weather" ng-if="data">
-        <h3>{{data.name}} - {{data.description}}</h3>
+        <h3 ng-cloak>{{data.name}} - {{data.description}}</h3>
         <dl>
-            <dt>Temprature:</dt>
-            <dd>{{data.main.temp | number:2}}C</dd>
-            <dd>{{data.fahrenheit | number:2}}F</dd>
+            <dt>Temperature:</dt>
+            <dd ng-cloak>{{data.main.temp | number:2}}C</dd>
+            <dd ng-cloak>{{data.fahrenheit | number:2}}F</dd>
         </dl>
     </div>
 </div>

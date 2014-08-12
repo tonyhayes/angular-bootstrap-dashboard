@@ -10,16 +10,16 @@ angular.module('dashboardServices', []).
     .factory('msgBus', ['$rootScope','socketService', function ($rootScope, socketService) {
         var msgBus = {};
 
-        msgBus.emitMsg = function (channel, data) {
+        msgBus.emitMsg = function (channel, data, action, type) {
             data = data || {};
             $rootScope.$emit(channel, data);
-            socketService.sendSocketMessage(channel, data);
+            socketService.sendSocketMessage(channel, data, action, type);
 
         };
-        msgBus.broadcastMsg = function (channel, data) {
+        msgBus.broadcastMsg = function (channel, data, action, type) {
             data = data || {};
             $rootScope.$broadcast(channel, data);
-            socketService.sendSocketMessage(channel, data);
+            socketService.sendSocketMessage(channel, data, action, type);
         };
         msgBus.onMsg = function (msg, func, scope) {
             var unbind = $rootScope.$on(msg, func);
@@ -28,19 +28,18 @@ angular.module('dashboardServices', []).
             }
         };
 
-        msgBus.queueMsg = function (channel, data) {
-            var initialize = true;
-            socketService.sendSocketMessage(channel, data, initialize);
+        msgBus.queueMsg = function (channel, data, action, type) {
+            socketService.sendSocketMessage(channel, data, action, type);
         };
 
         return msgBus;
     }])
-    .service('socketService', function ($rootScope) {
+    .service('socketService', function ($rootScope, dashboardService) {
 
 
         var stompClient = null;
 
-        var token = makeToken();
+        var token = dashboardService.getToken();
         var socket = new SockJS(dmApplicationEntryPoint+'/socket');
 
         this.getSocket = function () {
@@ -51,24 +50,53 @@ angular.module('dashboardServices', []).
                     console.log(message);
                     var msg = JSON.parse(message.body);
                     if (token == msg.token ) {
-                        if(msg.initialize){
+                        if(msg.action == 'initialize'){
                             $rootScope.$emit(msg.channel, msg.message);
                             console.log('initial message -- same token');
                         }else{
                             console.log('discarding message -- same token');
                         }
                     }else{
-                        $rootScope.$emit(msg.channel, msg.message);
+                        if(msg.action == 'initialize'){
+                            console.log('discarding message -- initialize for new dashboard user');
+                        }else{
+                            $rootScope.$emit(msg.channel, msg.message);
+                        }
                     }
                 });
             });
         };
-        this.sendSocketMessage = function (channel, data, initialize ) {
-            if(!initialize){
-                initialize = false;
+        this.sendSocketMessage = function (channel, data, action, type ) {
+            if(!channel){
+                channel = 'missingChannel';
+                console.log('socket configuration error -- channel not defined');
             }
-            var payLoad = JSON.stringify({ token:token, channel:channel, initialize:initialize, message: data });
+            if(!action){
+                action = 'message';
+            }
+            if(!type){
+                type = 'message';
+            }
+            var payLoad = JSON.stringify({ token:token, channel:channel, action:action, type: type, message: data });
             stompClient.send("/app/socket", {} , payLoad);
+        };
+
+
+
+
+    })
+    .service('dashboardService', function (localStorageService) {
+
+        var token = makeToken();
+              // if widget needs a unique identifier within its message
+        this.getToken = function () {
+            return token;
+        };
+
+        this.getUniqueToken = function () {
+
+            var newToken = makeToken();
+            return newToken;
         };
 
         function makeToken()
@@ -82,13 +110,8 @@ angular.module('dashboardServices', []).
             return token;
         }
 
-
-
-    })
-    .service('dashboardService', function (localStorageService) {
-
-
         this.getDashboards = function () {
+            //need service to read from server
             return db;
         };
         this.getDashboard = function (name) {
@@ -97,14 +120,38 @@ angular.module('dashboardServices', []).
                 return model;
             }
 
-            if (name == 'dashboard1') {
+            angular.forEach(db, function (dashboard) {
+                if (dashboard.id == name) {
+                    return dashboard;
+                }
+             });
+            // this is probably dangerous -- change this to show a dashboard splash page
+            if(db.length > 0){
                 return db[0];
-            } else {
-                return db[1];
             }
+
         };
         this.setDashboard = function (name, model) {
+            var found = false;
             localStorageService.set(name, model);
+            angular.forEach(db, function (dashboard) {
+                if (dashboard.id == name) {
+                    dashboard = model;
+                    found = true;
+                }
+            });
+            if(!found){
+                db.push(model);
+            }
+        };
+
+        this.removeDashboard = function (name) {
+            localStorageService.remove(name);
+            angular.forEach(db, function (dashboard, idx) {
+                if (dashboard.id == name) {
+                    db.splice(idx, 1);
+                }
+            });
         };
 
         var db = [
@@ -227,7 +274,30 @@ angular.module('dashboardServices', []).
                         ]
                     }
                 ]
+            },
+            {
+                title: "Dashboard 06",
+                id: "dashboard4",
+                structure: "4-8",
+                rows: [{
+                    columns: [
+                        {
+                            styleClass: "col-md-6",
+                            widgets: [
+                            ]
+                        },
+                        {
+                            styleClass: "col-md-6",
+                            widgets: [
+                            ]
+                        }
+
+                    ]
+                }
+
+                ]
             }
+
         ];
 
 

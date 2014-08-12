@@ -1,0 +1,26 @@
+              <div class="panel">
+                <button data-ng-click="connect()" btn btn-success btn-sm>Connect</button>
+                <button data-ng-click="disconnect()" class="btn btn-danger btn-sm">Disconnect</button>
+            </div>
+            <p />
+            <div class="panel panel-default">
+                <div class="panel-heading">Send Messages To WebSocket Server</div>
+                <div class="panel-body" id="conversationDiv">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model='userMessage' placeholder="Enter message"> <span class="input-group-btn">
+                <button data-ng-click="send()" ng-disabled="!chat.connect" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-share-alt"></span>&nbsp;Send
+                </button>
+              </span>
+                    </div>
+
+                     <!-- .input-group -->
+                </div>
+                <!-- .panel-body -->
+                <div class="panel-body">
+                    <p data-ng-repeat="message in messages | orderBy: $index track by $index">
+                       {{message.name}}: &nbsp {{message.messageText}}
+                    </p>
+                </div>
+            </div>
+            <!-- .panel -->

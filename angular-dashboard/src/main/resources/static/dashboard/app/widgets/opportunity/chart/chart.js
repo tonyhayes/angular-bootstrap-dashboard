@@ -71,7 +71,7 @@ angular.module('dm.widgets.opportunityChart', ['adf.provider', "ngQuickDate", 'n
         $scope.selectedDate = new Date(2012, 1, 16).getTime();
 
         if(config.dateSync){
-            msgBus.queueMsg(config.publish, {'date': lastSelectedDate});
+            msgBus.queueMsg(config.publish, {'date': lastSelectedDate}, 'initialize', 'opportunityChartDateSetting' );
         }
 
             $scope.options =  {
@@ -222,7 +222,7 @@ angular.module('dm.widgets.opportunityChart', ['adf.provider', "ngQuickDate", 'n
 
 
                     if(config.dateSync){
-                        msgBus.emitMsg(config.publish, {'date': $scope.selectedDate});
+                        msgBus.emitMsg(config.publish, {'date': $scope.selectedDate}, 'message', 'opportunityChartDateSetting');
                     }else{
                         dateChanged(newDate);
                     }

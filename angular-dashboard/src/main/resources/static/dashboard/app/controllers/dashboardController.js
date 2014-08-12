@@ -38,6 +38,11 @@ angular.module('dashboardControllers', [])
                     files: ['dashboard/app/widgets/randommsg/randommsg.js']
                 }),
                 $ocLazyLoad.load({
+                    name: 'dm.widgets.chatroom',
+                    reconfig: true,
+                    files: ['dashboard/app/widgets/chatroom/chatroom.js']
+                }),
+                $ocLazyLoad.load({
                         name: 'dm.widgets.news',
                         reconfig: true,
                         files: ['dashboard/app/widgets/news/news.js']
@@ -121,7 +126,89 @@ angular.module('dashboardControllers', [])
             localStorageService.set(name, model);
         });
     })
-    .controller('NavigationController', function ($scope, $location, $ocLazyLoad) {
+    .controller('DashboardCreatorController', function ($scope, $location, $modal, $log,
+                                                        dashboard, dashboardService, localStorageService, ModalService) {
+
+        // add new dashboard
+        $scope.addDashboardDialog = function () {
+            var addDashboardScope = $scope.$new();
+            var dashboardId = dashboardService.getUniqueToken();
+            addDashboardScope.structures = dashboard.structures;
+            var master = angular.copy($scope.model);
+            $scope.model =            {
+                title: "",
+                id: dashboardId,
+                structure: "6-6",
+                rows: [{
+                    columns: [
+                        {
+                            styleClass: "col-md-6",
+                            widgets: [
+                            ]
+                        },
+                        {
+                            styleClass: "col-md-6",
+                            widgets: [
+                            ]
+                        }
+
+                    ]
+                }
+
+                ]
+            };
+
+            var instance = $modal.open({
+                scope: addDashboardScope,
+                templateUrl: 'dashboard/framework/templates/dashboard-add.html'
+            });
+             addDashboardScope.cancelDashboard = function () {
+                $scope.model = master;
+
+                instance.close();
+                addDashboardScope.$destroy();
+            };
+            addDashboardScope.createDashboard  = function () {
+                dashboardService.setDashboard($scope.model.id, $scope.model);
+//                localStorageService.set($scope.model.id, $scope.model);
+                $location.path('/dashboard/' + $scope.model.id);
+                $scope.dbs = dashboardService.getDashboards();
+                instance.close();
+                addDashboardScope.$destroy();
+
+            };
+
+        };
+
+        $scope.deleteDashboardDialog = function () {
+
+
+            var modalDefaults = {
+                templateUrl: 'dashboard/app/partials/modal.html'
+            };
+            var modalOptions = {
+                closeButtonText: 'Cancel',
+                actionButtonText: 'Delete this dashboard',
+                headerText: 'Delete dashboard?',
+                bodyText: 'Are you sure you want to delete this dashboard?'
+            };
+
+            ModalService.showModal(modalDefaults, modalOptions).then(function (result) {
+                if (result === 'ok') {
+                    dashboardService.removeDashboard($scope.model.id);
+                    var model = dashboardService.getDashboard();
+                    $scope.dbs = dashboardService.getDashboards();
+                    if(model.id){
+                        $location.path('/dashboard/' + model.id);
+                    }
+                }
+            });
+
+        };
+
+
+    })
+    .controller('NavigationController', function ($scope, $location) {
 
         $scope.navCollapsed = true;
 
