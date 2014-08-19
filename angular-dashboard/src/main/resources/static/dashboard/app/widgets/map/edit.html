@@ -1,0 +1,15 @@
+<form role="form">
+    <div class="form-group">
+        <label>Sync with other widgets</label>
+        <input type="checkbox" class="form-control" name="mapSync" ng-model="config.mapSync" >
+    </div>
+     <div class="form-group">
+        <label>Publish Channel</label>
+        <input ng-disabled="!config.mapSync" type="text" class="form-control" name="publish" ng-model="config.publish" >
+    </div>
+    <div class="form-group">
+        <label>Subscribe Channel</label>
+        <input ng-disabled="!config.mapSync" type="text" class="form-control" name="subscribe" ng-model="config.subscribe" >
+    </div>
+
+</form>

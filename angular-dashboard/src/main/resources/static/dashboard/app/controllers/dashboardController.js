@@ -33,9 +33,27 @@ angular.module('dashboardControllers', [])
                     ]
                 }),
                 $ocLazyLoad.load({
+                    name: 'dm.widgets.uploader',
+                    reconfig: true,
+                    files: ['dashboard/components/uploader/angular-file-upload.min.js', 'dashboard/app/widgets/uploader/uploader.js']
+                }),
+                $ocLazyLoad.load({
+                    name: 'dm.widgets.map',
+                    reconfig: true,
+                    files: ['dashboard/components/leaflet/leaflet.css',
+                        'dashboard/components/leaflet/leaflet.js',
+                        'dashboard/components/leaflet/angular-leaflet-directive.js' ,
+                        'dashboard/app/widgets/map/map.js']
+                }),
+                $ocLazyLoad.load({
                     name: 'dm.widgets.randommsg',
                     reconfig: true,
                     files: ['dashboard/app/widgets/randommsg/randommsg.js']
+                }),
+                $ocLazyLoad.load({
+                    name: 'dm.widgets.iframe',
+                    reconfig: true,
+                    files: ['dashboard/app/widgets/iframe/iframe.js']
                 }),
                 $ocLazyLoad.load({
                     name: 'dm.widgets.chatroom',

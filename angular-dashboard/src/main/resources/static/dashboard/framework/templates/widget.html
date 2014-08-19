@@ -1,9 +1,9 @@
 <div class="widget panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
+    <div class="panel-heading" ng-if="editMode">
+        <h3 class="panel-title" ng-if="editMode">
             {{definition.title}}
       <span class="pull-right">
-        <a href="" title="reload widget content" ng-if="widget.reload" ng-click="reload()">
+        <a href="" title="reload widget content" ng-if="widget.reload" ng-click="reload()" ng-if="editMode">
             <i class="fa fa-refresh"></i>
         </a>
         <!-- change widget location -->
@@ -30,6 +30,6 @@
         </h3>
     </div>
     <div class="panel-body" collapse="isCollapsed">
-        <adf-widget-content model="definition" content="widget"/>
+        <adf-widget-content model="definition" content="widget" />
     </div>
 </div>

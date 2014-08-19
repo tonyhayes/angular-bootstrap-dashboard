@@ -46,6 +46,7 @@ angular.module('adf')
             return deferred.promise;
         };
 
+
         function compileWidget($scope, $element) {
             var model = $scope.model;
             var content = $scope.content;
@@ -122,6 +123,7 @@ angular.module('adf')
                 $scope.$on('widgetReload', function () {
                     compileWidget($scope, $element);
                 });
+
             }
         };
 

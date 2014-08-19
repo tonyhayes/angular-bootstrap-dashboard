@@ -1,19 +1,19 @@
 <form role="form">
     <div class="form-group">
-        <label for="counts">Display Opportunities by Count</label>
-        <input type="checkbox" class="form-control" id="counts" ng-model="config.counts" >
+        <label>Display Opportunities by Count</label>
+        <input type="checkbox" class="form-control" name="counts" ng-model="config.counts" >
     </div>
     <div class="form-group">
-        <label for="dateSync">Sync date with other history charts</label>
-        <input type="checkbox" class="form-control" id="dateSync" ng-model="config.dateSync" >
+        <label>Sync date with other history charts</label>
+        <input type="checkbox" class="form-control" name="dateSync" ng-model="config.dateSync" >
     </div>
      <div class="form-group">
-        <label for="publish">Publish Channel</label>
-        <input ng-disabled="!config.dateSync" type="text" class="form-control" id="publish" ng-model="config.publish" >
+        <label>Publish Channel</label>
+        <input ng-disabled="!config.dateSync" type="text" class="form-control" name="publish" ng-model="config.publish" >
     </div>
     <div class="form-group">
-        <label for="subscribe">Subscribe Channel</label>
-        <input ng-disabled="!config.dateSync" type="text" class="form-control" id="subscribe" ng-model="config.subscribe" >
+        <label>Subscribe Channel</label>
+        <input ng-disabled="!config.dateSync" type="text" class="form-control" name="subscribe" ng-model="config.subscribe" >
     </div>
 
 </form>

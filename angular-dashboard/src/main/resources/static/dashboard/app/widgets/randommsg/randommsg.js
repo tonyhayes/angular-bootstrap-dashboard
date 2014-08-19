@@ -31,6 +31,7 @@ angular.module('dm.widgets.randommsg', ['adf.provider'])
                 title: 'Random Message',
                 description: 'Display a random quote of Douglas Adams',
                 templateUrl: 'dashboard/app/widgets/randommsg/randommsg.html',
+                reload: true,
                 controller: 'randommsgCtrl'
             });
     })
@@ -94,6 +95,9 @@ angular.module('dm.widgets.randommsg', ['adf.provider'])
             }
         };
     })
-    .controller('randommsgCtrl', function ($scope, randommsgService) {
+    .controller('randommsgCtrl', function ($scope, $timeout, randommsgService) {
         $scope.msg = randommsgService.get();
+        $scope.widgetScheduledReload = true;
+
+
     });

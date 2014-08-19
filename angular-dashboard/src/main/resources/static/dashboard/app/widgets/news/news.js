@@ -65,6 +65,11 @@ angular.module('dm.widgets.news', ['adf.provider'])
             }
         };
     })
-    .controller('newsCtrl', function ($scope, feed) {
+    .controller('newsCtrl', function ($scope, $timeout, feed) {
         $scope.feed = feed;
+
+        $timeout(function () {
+            $scope.$broadcast('widgetReload');
+        }, 15*60*1000);
+
     });

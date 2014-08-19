@@ -25,7 +25,8 @@
 'use strict';
 
 angular.module('adf')
-    .directive('adfWidget', function ($log, $modal, dashboard) {
+
+    .directive('adfWidget', function ($log, $modal, $interval, dashboard) {
 
         function preLink($scope, $element, $attr) {
             var definition = $scope.definition;
@@ -66,7 +67,7 @@ angular.module('adf')
             }
         }
 
-        function postLink($scope, $element, $attr) {
+        function postLink($scope, $element, $attr, $timeout) {
             var definition = $scope.definition;
             if (definition) {
                 // bind close function
@@ -80,6 +81,13 @@ angular.module('adf')
                     }
                     $element.remove();
                 };
+
+                if($scope.widget.reload){
+                    $interval(function(){
+                        $scope.$broadcast('widgetReload');
+                        console.info('reloading widget '+ $scope.widget.title );
+                    }, 15*60*1000);
+                }
 
                 // bind reload function
                 $scope.reload = function () {
